@@ -1,14 +1,13 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  cloudopsagent
-
-  SAM Template for cloudopsagent
+  AWS Agent 
+  SAM Template for AWS Strands Agent
 
 Globals:
   Function:
     Timeout: 30
-    Runtime: python3.13
+    Runtime: python3.12
 
 Parameters:
   TwilioAccountIDSIDSecretName:
@@ -29,35 +28,35 @@ Parameters:
     Description: "Name of the secret in AWS Secrets Manager for Whatsapp Number"
 
 Resources:
-  MyRestApi:
+  MyAgenticRestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: my-cloudopsagent-api
+      Name: my-strandsagent-api
       Parameters:
         endpointConfigurationTypes: REGIONAL
-      Description: "Cloudops Agent API Endpoint"
+      Description: "Strands Agent API Endpoint"
       BinaryMediaTypes:
         - 'application/json'
   
-  MyRestApiResource:
+  MyAgenticRestApiResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !GetAtt MyRestApi.RootResourceId
+      ParentId: !GetAtt MyAgenticRestApi.RootResourceId
       PathPart: genai
-      RestApiId: !Ref MyRestApi
+      RestApiId: !Ref MyAgenticRestApi
 
-  MyRestApiMethod:
+  MyAgenticRestApiMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
       HttpMethod: POST
-      ResourceId: !Ref MyRestApiResource
-      RestApiId: !Ref MyRestApi
+      ResourceId: !Ref MyAgenticRestApiResource
+      RestApiId: !Ref MyAgenticRestApi
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
         Uri: 
-          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CloudopsLambda.Arn}/invocations
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${StrandsLambda.Arn}/invocations
       MethodResponses:
         - StatusCode: 200
           ResponseModels:
@@ -65,22 +64,22 @@ Resources:
 
   ApiDeployment:
     Type: AWS::ApiGateway::Deployment
-    DependsOn: MyRestApiMethod 
+    DependsOn: MyAgenticRestApiMethod 
     Properties:
-      RestApiId: !Ref MyRestApi
+      RestApiId: !Ref MyAgenticRestApi
       Description: 'Deployment for api v1.0'
  
   ApiProdStage:
     Type: AWS::ApiGateway::Stage
     Properties:
       DeploymentId: !Ref ApiDeployment
-      RestApiId: !Ref MyRestApi
+      RestApiId: !Ref MyAgenticRestApi
       StageName: prod
 
-  CloudopsLambda:
+  StrandsLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: my-cloudopsagent-lambda
+      FunctionName: my-strandsagent-lambda
       CodeUri: src/
       Handler: app.lambda_handler
       Policies:
@@ -97,11 +96,27 @@ Resources:
               Action:
                 - ec2:*
               Resource: "*"
+            - Effect: Allow
+              Action:
+                - bedrock:*
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - s3:*
+              Resource: "*"
 
   LambdaInvokePermission:
     Type: AWS::Lambda::Permission
     Properties:
-      FunctionName: !Ref CloudopsLambda
+      FunctionName: !Ref StrandsLambda
       Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyRestApi}/*/POST/genai
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyAgenticRestApi}/*/POST/genai
+
+Outputs:
+  StackCreationSuccess:
+    Description: "Strands Agent Stack"
+    Value: "Strands Agent Created Successfully"
+  StrandsLambdaArn:
+    Description: "Strands Lambda ARN"
+    Value: !GetAtt StrandsLambda.Arn
