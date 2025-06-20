@@ -46,7 +46,7 @@ from typing import Dict
 def getmyagent(_query):
 
     bedrock_model = BedrockModel(
-        model_id="amazon.nova-lite-v1:0",  # System inference profile ID
+        model_id="anthropic.claude-3-sonnet-20240229-v1:0",  # System inference profile ID
         region_name="ap-south-1",
         temperature=0.1,
     )
