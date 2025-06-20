@@ -1,6 +1,6 @@
 import json
 from tools import getmyagent
-from tools import tools_list
+# from tools import tools_list
 import logging
 from utils import get_secret
 import os
