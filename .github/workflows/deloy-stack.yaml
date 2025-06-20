@@ -23,5 +23,5 @@ jobs:
       - run: |
           echo "🚀 Starting deploy..."
           cd strandsagent
-          sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
+          sam deploy --stack-name strands-agent --no-confirm-changeset --no-fail-on-empty-changeset
           echo "✅ Deploy finished!"
