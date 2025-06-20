@@ -60,8 +60,8 @@ def getmyagent(_query):
         system_prompt=system_prompt
     )
 
-    response = agent(task_description)
+    response = agent(_query)
 
     logger.info(f'Response Received from LLM: {response}')\
-    
+
     return str(response)

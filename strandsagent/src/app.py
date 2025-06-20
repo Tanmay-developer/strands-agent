@@ -13,6 +13,7 @@ def lambda_handler(event, context):
     logger.info(f"Received event: {event}")
 
     body = event.get('query')
+    logger.info(f"Query raised from user: {body}")
 
     response_message = getmyagent(body) 
     
