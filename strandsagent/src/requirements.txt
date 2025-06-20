@@ -1,0 +1,7 @@
+requests
+boto3
+twilio
+strands-agents
+strands-agents-tools
+mcp
+streamlit
