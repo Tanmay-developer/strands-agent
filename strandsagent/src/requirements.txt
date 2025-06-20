@@ -4,4 +4,3 @@ twilio
 strands-agents
 strands-agents-tools
 mcp
-streamlit
