@@ -12,10 +12,24 @@ logger.setLevel(logging.INFO)
 def lambda_handler(event, context):
     logger.info(f"Received event: {event}")
 
-    body = event.get('query')
-    logger.info(f"Query raised from user: {body}")
+    # Decode and parse body
+    body = event.get('body', '')
+    if event.get('isBase64Encoded', False):
+        body = base64.b64decode(body).decode('utf-8')
 
-    response_message = getmyagent(body) 
+    try:
+        body_json = json.loads(body)
+    except Exception as e:
+        logger.error(f"Error parsing body JSON: {e}")
+        return {
+            "statusCode": 400,
+            "body": json.dumps({"error": "Invalid JSON"})
+        }
+
+    query = body_json.get("query")
+    logger.info(f"Query raised from user: {query}")
+
+    response_message = getmyagent(query)
     
     return {
         "response": response_message 
