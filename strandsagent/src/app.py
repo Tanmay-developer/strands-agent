@@ -6,6 +6,8 @@ import logging
 from utils import get_secret
 import os
 import boto3
+import urllib.parse
+from twilio.rest import Client
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -34,6 +36,27 @@ def lambda_handler(event, context):
     
     logger.info(f"Final Answer: {response_message}")
 
+    account_sid = get_secret("TWILIO_ACCOUNT_SID")
+    auth_token = get_secret("TWILIO_AUTH_TOKEN")
+    whatsapp_no = get_secret("MY_WHATSAPP_ID")
+
+    client = Client(account_sid, auth_token)
+
+    try: 
+        message = client.messages.create(
+            body=response_message,
+            from_="whatsapp:+14155238886",
+            to=f"whatsapp:{whatsapp_no}",
+        )
+        logger.info(f"Message sent: SID {message.sid}")
+    except Exception as e:
+        logger.error(f"Failed to send message: {e}")
+        return {
+            "statusCode": 500,
+            "body": json.dumps({"error": "Failed to send message"})
+        }
+
     return {
-        "response": str(response_message) 
+        "statusCode": 200,
+        "body": json.dumps({"message": "Message sent successfully."})
     }
