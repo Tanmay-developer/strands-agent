@@ -8,6 +8,9 @@ import os
 import atexit
 from typing import Dict
 
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
 # aws_docs_mcp_client = MCPClient(lambda: stdio_client(
 #     StdioServerParameters(command="uvx", args=["awslabs.aws-documentation-mcp-server@latest"])
 # ))
