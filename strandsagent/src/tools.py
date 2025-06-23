@@ -3,7 +3,7 @@ from strands.tools.mcp import MCPClient
 from strands.models import BedrockModel
 from mcp import StdioServerParameters, stdio_client
 from strands_tools import use_aws
-
+import logging
 import os
 import atexit
 from typing import Dict
