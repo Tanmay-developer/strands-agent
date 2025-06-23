@@ -50,9 +50,10 @@ logger.setLevel(logging.INFO)
 def getmyagent(_query):
 
     bedrock_model = BedrockModel(
-        model_id="anthropic.claude-3-sonnet-20240229-v1:0",  # System inference profile ID
+        model_id="apac.anthropic.claude-3-7-sonnet-20250219-v1:0",  # System inference profile ID
         region_name="ap-south-1",
-        temperature=0.1,
+        temperature=0.0,
+        max_tokens = 64000
     )
 
     with open("agent_prompt.txt", "r", encoding="utf-8") as file:
