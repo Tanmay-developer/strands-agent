@@ -6,7 +6,7 @@ Description: >
 
 Globals:
   Function:
-    Timeout: 30
+    Timeout: 600
     Runtime: python3.13
 
 Parameters:
