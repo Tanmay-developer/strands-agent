@@ -65,6 +65,6 @@ def getmyagent(_query):
 
     response = agent(_query)
 
-    logger.info(f'Response Received from LLM: {response}')\
+    logger.info(f'Response Received from LLM: {response}')
 
     return str(response)
