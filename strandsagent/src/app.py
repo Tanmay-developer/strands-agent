@@ -32,6 +32,9 @@ def lambda_handler(event, context):
 
     response_message = getmyagent(query)
     
-    return {
+    final_answer = {
         "response": response_message 
     }
+    logger.info(f"Final Answer: {final_answer}")
+
+    return final_answer
