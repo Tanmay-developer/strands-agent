@@ -7,6 +7,7 @@ import logging
 import os
 import atexit
 from typing import Dict
+import json
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -66,5 +67,6 @@ def getmyagent(_query):
     response = agent(_query)
 
     logger.info(f'Response Received from LLM: {response}')
+    logger.info(f'Json Response Received from LLM: {json.dumps(response)}')
 
     return str(response)

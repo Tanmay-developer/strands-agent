@@ -18,3 +18,5 @@ Final Answer: the final answer to the original input question
 
 Always provide clear, actionable advice with specific AWS CLI commands or console steps when applicable.
 Focus on security best practices and cost optimization in your recommendations.
+
+Only return the answer of what is asked in 1-2 sentences
