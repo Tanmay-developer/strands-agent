@@ -58,5 +58,5 @@ def lambda_handler(event, context):
 
     return {
         "statusCode": 200,
-        "body": json.dumps({"message": "Message sent successfully."})
+        "body": json.dumps({"message": f"Here you go: {response_message}"})
     }
